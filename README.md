@@ -14,3 +14,13 @@ A API REST desenvolvida aqui é voltada para a atividade A2 da disciplina de **T
 1. Clone o repositório:
    git clone <URL_DO_REPOSITORIO>
    cd <PASTA_DO_PROJETO>
+
+   ---
+
+## 🚀 Como Executar a Aplicação
+
+Para iniciar o servidor HTTP:
+
+npm start
+
+A API estará acessivel em: http://localhost:3000.
