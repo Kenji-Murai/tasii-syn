@@ -47,3 +47,11 @@ Todas as rotas possuem o prefixo `/api/v1/pedidos`:
 ### Validação de Entrada (POST)
 
 Para criar um pedido, o corpo da requisição deve conter obrigatoriamente um `cliente` (string) e ao menos um item no array `itens`. Caso contrário, a API retorna `400 Bad Request`.
+
+## 🧪 Testes Automatizados
+
+Os testes de integração foram desenvolvidos utilizando **Jest** e **Supertest**, validando a criação de pedidos, cálculo do valor total, buscas e respostas de erro.
+
+Para rodar os testes:
+
+npm test
