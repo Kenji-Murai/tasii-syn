@@ -1,4 +1,4 @@
-const orderService = require('../services/orderService');
+const { orderService, TIPOS_PERMITIDOS, PRIORIDADES_PERMITIDAS } = require('../services/orderService');
 
 exports.getAllOrders = (req, res, next) => {
   try {
@@ -23,14 +23,29 @@ exports.getOrderById = (req, res, next) => {
 
 exports.createOrder = (req, res, next) => {
   try {
-    const { cliente, itens } = req.body;
+    const { cliente, tipo, valor, prioridade } = req.body;
 
-    // Validação básica de entrada
-    if (!cliente || !itens || !Array.isArray(itens) || itens.length === 0) {
-      return res.status(400).json({ error: 'Informe o cliente e pelo menos um item válido.' });
+    if (!cliente || typeof cliente !== 'string' || cliente.trim().length === 0) {
+      return res.status(400).json({ error: 'O campo cliente é obrigatório e não pode ser vazio.' });
     }
 
-    const newOrder = orderService.create({ cliente, itens });
+    if (typeof valor !== 'number' || valor <= 0) {
+      return res.status(400).json({ error: 'O valor deve ser um número maior que zero.' });
+    }
+
+    if (!tipo || !TIPOS_PERMITIDOS.includes(tipo)) {
+      return res.status(400).json({ 
+        error: `Tipo inválido. Valores permitidos: ${TIPOS_PERMITIDOS.join(', ')}` 
+      });
+    }
+
+    if (!prioridade || !PRIORIDADES_PERMITIDAS.includes(prioridade)) {
+      return res.status(400).json({ 
+        error: `Prioridade inválida. Valores permitidos: ${PRIORIDADES_PERMITIDAS.join(', ')}` 
+      });
+    }
+
+    const newOrder = orderService.create({ cliente, tipo, valor, prioridade });
     return res.status(201).json(newOrder);
   } catch (error) {
     next(error);
@@ -40,28 +55,26 @@ exports.createOrder = (req, res, next) => {
 exports.updateOrderStatus = (req, res, next) => {
   try {
     const { status } = req.body;
+
     if (!status) {
-      return res.status(400).json({ error: 'O novo status é obrigatório.' });
+      return res.status(400).json({ error: 'O campo status é obrigatório.' });
     }
 
-    const updatedOrder = orderService.updateStatus(req.params.id, status);
-    if (!updatedOrder) {
+    const result = orderService.updateStatus(req.params.id, status);
+
+    if (result.error === 'NOT_FOUND') {
       return res.status(404).json({ error: 'Pedido não encontrado.' });
     }
 
-    return res.status(200).json(updatedOrder);
-  } catch (error) {
-    next(error);
-  }
-};
-
-exports.deleteOrder = (req, res, next) => {
-  try {
-    const deleted = orderService.delete(req.params.id);
-    if (!deleted) {
-      return res.status(404).json({ error: 'Pedido não encontrado.' });
+    if (result.error === 'INVALID_STATUS') {
+      return res.status(400).json({ error: 'Status informado é inválido.' });
     }
-    return res.status(204).send();
+
+    if (result.error === 'TRANSITION_NOT_ALLOWED') {
+      return res.status(400).json({ error: 'Pedidos entregues ou cancelados não podem ter seu status alterado.' });
+    }
+
+    return res.status(200).json(result.order);
   } catch (error) {
     next(error);
   }

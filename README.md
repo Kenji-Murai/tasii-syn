@@ -48,10 +48,23 @@ Todas as rotas possuem o prefixo `/api/v1/pedidos`:
 
 Para criar um pedido, o corpo da requisição deve conter obrigatoriamente um `cliente` (string) e ao menos um item no array `itens`. Caso contrário, a API retorna `400 Bad Request`.
 
-## 🧪 Testes Automatizados
+## Testes Automatizados
 
 Os testes de integração foram desenvolvidos utilizando **Jest** e **Supertest**, validando a criação de pedidos, cálculo do valor total, buscas e respostas de erro.
 
 Para rodar os testes:
 
 npm test
+
+## Registro do Uso de Inteligência Artificial
+
+Em conformidade com as orientações do projeto, o uso de Inteligência Artificial (Gemini) foi adotado como ferramenta de apoio durante o desenvolvimento do mesmo.
+
+* **Tarefas em que foi utilizada:**
+  * Auxílio na estruturação inicial da arquitetura em camadas (`routes`, `controllers`, `services`).
+  * Sugestão de padrões para validações de entrada e tratamento centralizado de erros.
+  * Elaboração dos cenários de testes automatizados com Jest.
+
+* **Sugestões Aceitas e Modificadas:**
+  * **Separar `app.js` e `server.js` (Aceita):** A IA sugeriu isolar a instância do Express da inicialização do servidor HTTP, o que facilitou a execução dos testes com `supertest` sem prender portas de rede.
+  * **Estrutura do modelo de dados (Modificada):** A sugestão inicial da IA trazia um array de itens dentro do pedido. Após checagem e validação das especificações do projeto, modificamos para atender estritamente aos campos solicitados: `cliente`, `tipo`, `valor`, `prioridade` e `status`.

@@ -1,6 +1,10 @@
 let orders = [];
 let nextId = 1;
 
+const TIPOS_PERMITIDOS = ['entrega', 'retirada'];
+const PRIORIDADES_PERMITIDAS = ['baixa', 'normal', 'alta'];
+const STATUS_PERMITIDOS = ['recebido', 'em_preparacao', 'enviado', 'entregue', 'cancelado'];
+
 class OrderService {
   getAll() {
     return orders;
@@ -13,36 +17,41 @@ class OrderService {
   create(data) {
     const newOrder = {
       id: nextId++,
-      cliente: data.cliente,
-      itens: data.itens, // Array de itens { nome, quantidade, precoUnitario }
-      total: data.itens.reduce((acc, item) => acc + (item.quantidade * item.precoUnitario), 0),
-      status: 'PENDENTE',
-      criadoEm: new Date().toISOString()
+      cliente: data.cliente.trim(),
+      tipo: data.tipo,
+      valor: Number(data.valor),
+      prioridade: data.prioridade,
+      status: 'recebido'
     };
     orders.push(newOrder);
     return newOrder;
   }
 
-  updateStatus(id, status) {
+  updateStatus(id, newStatus) {
     const order = this.getById(id);
-    if (!order) return null;
-    
-    order.status = status;
-    return order;
+    if (!order) return { error: 'NOT_FOUND' };
+
+    if (!STATUS_PERMITIDOS.includes(newStatus)) {
+      return { error: 'INVALID_STATUS' };
+    }
+
+    if (['entregue', 'cancelado'].includes(order.status)) {
+      return { error: 'TRANSITION_NOT_ALLOWED' };
+    }
+
+    order.status = newStatus;
+    return { order };
   }
 
-  delete(id) {
-    const index = orders.findIndex(order => order.id === Number(id));
-    if (index === -1) return false;
-    
-    orders.splice(index, 1);
-    return true;
-  }
-
-  clearAll() { // Útil para resetar o estado durante os testes
+  clearAll() {
     orders = [];
     nextId = 1;
   }
 }
 
-module.exports = new OrderService();
+module.exports = {
+  orderService: new OrderService(),
+  TIPOS_PERMITIDOS,
+  PRIORIDADES_PERMITIDAS,
+  STATUS_PERMITIDOS
+};
