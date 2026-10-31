@@ -1,10 +1,10 @@
 ## Grupo que desenvolveu este projeto
 
-Carlos Henrique Magalhaes Moreira
-Gabriel de Almeida Pimentel
-Mary Anne Souza Santos
-Davi Abade de Castro
-Kenji Murai dos Santos Teraoka
+- Carlos Henrique Magalhaes Moreira
+- Gabriel de Almeida Pimentel
+- Mary Anne Souza Santos
+- Davi Abade de Castro
+- Kenji Murai dos Santos Teraoka
 
 
 # API de Gerenciamento de Pedidos
