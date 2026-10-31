@@ -1,3 +1,12 @@
+## Grupo que desenvolveu este projeto
+
+Carlos Henrique Magalhaes Moreira
+Gabriel de Almeida Pimentel
+Mary Anne Souza Santos
+Davi Abade de Castro
+Kenji Murai dos Santos Teraoka
+
+
 # API de Gerenciamento de Pedidos
 
 A API REST desenvolvida neste projeto é voltada para a avaliação **A2** da disciplina de **Tópicos Avançados em Sistemas de Informação II**. O objetivo da aplicação é gerenciar o fluxo de pedidos de uma loja.
@@ -118,3 +127,4 @@ Em conformidade com as orientações acadêmicas da atividade A2, o uso de Intel
 - **Sugestões Aceitas e Modificadas:**
   - **Separação de `app.js` e `server.js` (Aceita):** A IA sugeriu isolar a instância do Express da inicialização do servidor HTTP, permitindo a execução dos testes de integração com `supertest` sem ocupar portas de rede.
   - **Validação e Cálculo do Total (Modificadas):** As sugestões de validação enviadas pela IA foram recalculadas para garantir que o cálculo do campo `total` fosse feito obrigatoriamente no backend com base no preço unitário e na quantidade do array de `itens`, evitando manipulações indevidas vindas do cliente.
+
